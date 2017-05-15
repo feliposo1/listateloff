@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html ng-app="ListaTelefonica" lang="pt-br">
+<head>
+	<title>Lista telefônica</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=width, initial-scale=1.0"/>
+
+	<!-- css -->
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic">
+	<link rel='stylesheet prefetch' href='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.3/angular-material.css'>
+	<link rel='stylesheet prefetch' href='https://material.angularjs.org/1.1.3/docs.css'>
+	<link rel="stylesheet" type="text/css" href="css/app.css">
+
+	<!-- bibliotecas -->
+
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-route.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js'></script>
+	<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js'></script>
+	<script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/t-114/svg-assets-cache.js'></script>
+	<script src='https://cdn.gitcdn.link/cdn/angular/bower-material/v1.1.3/angular-material.js'></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>
+
+	<!-- formatação para pt-br -->
+
+	<script src="libs/angular_local_pt-br.js"></script>
+
+	<!-- módulo principal -->
+
+	<script src="js/app.js"></script>
+
+	<!-- controller -->
+	<script src="js/controllers/listaTelefonicaCtrl.js"></script>
+
+	<!-- css estático da lista de contatos -->
+
+
+
+</head>
+	
+<!-- body recebe o ng controller -->
+
+<body ng-controller="ListaTelefonicaCtrl">
+
+<!-- aqui fica o menu horizontal -->
+
+<md-toolbar class="menuLista"  layout="column" layout-align="center center">
+    <div class="menuListaSub">
+      <a class="md-flex" href="index.html">{{app}}</a>
+    </div>
+ </md-toolbar>
+
+
+<div class="ctnFiltros" class="md-block" flex layout="row">
+	
+ <!-- busca -->
+ <md-input-container flex="100" class="md-icon-float md-block">
+      <!-- Use floating label instead of placeholder -->
+      <label>Buscar contato</label>
+      <md-icon md-svg-src="img/icons/ic_person_24px.svg" class="name"></md-icon>
+      <input name="criterioDeBusca" ng-model="criterioDeBusca" type="text">
+  </md-input-container>
+
+  <!-- busca -->
+ <md-input-container flex="100" class="md-icon-float md-block">
+      <!-- Use floating label instead of placeholder -->
+      <label>Buscar contato</label>
+      <md-icon md-svg-src="img/icons/ic_person_24px.svg" class="name"></md-icon>
+      <input name="criterioDeBusca" ng-model="criterioDeBusca2" type="text">
+  </md-input-container>
+
+   <!-- busca -->
+ <md-input-container flex="100" layout="row" class="md-icon-float md-block" layout-align="center" style="display: flex">
+      <!-- Use floating label instead of placeholder -->
+      <md-button flex class="md-raised md-primary" ng-click="ordenarPor('nome')">Nome</md-button>
+      <md-button flex class="md-raised md-primary" ng-click="ordenarPor('telefone')" >Telefone</md-button>
+      <md-button flex ng-click="ordenarPor('operadora')" class="md-raised md-primary" >Operadora</md-button>
+      <md-button flex ng-click="ordenarPor('data')" class="md-raised md-primary" >Data</md-button>
+      
+  </md-input-container>
+
+
+</div>
+
+
+
+<!-- div pai para a lista -->
+
+ <div flex>
+
+    
+ 		<!-- container para a lista  -->
+
+	    <md-content>
+
+	    <!-- iniciando a lista -->
+	      <md-list flex>
+	        <!-- iniciando um item e fazendo um loop para exibição dos objetos contatos-->
+
+	        <md-list-item class="md-3-line" ng-class="{selecionado: contato.selecionado}" ng-click="null" ng-repeat="contato in contatos | limitTo: 5 | filter:{nome: criterioDeBusca, data: criterioDeBusca2} | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao ">
+
+	        <!-- container com o alinhamento horizontal -->
+	          <div class="md-list-item-text" layout="row" layout-align="space-between center">
+
+	          <!-- checkbox -->
+	          	
+
+		         <!-- dados do contato -->
+		         <div layout="column">
+		         	<h3>Nome: {{contato.nome}}</h3>
+		            <h4>Telefone: {{contato.telefone}}</h4>
+		            <p>Operadora: {{contato.operadora}}</p>
+		            <p>Data: {{contato.data | date:'dd/MM/yyyy'}}</p>
+		         </div>
+
+		         <md-checkbox class="md-primary" ng-model="contato.selecionado">
+		            
+		         </md-checkbox>
+	            
+	          </div>
+	        </md-list-item>
+
+	        <!-- divisor -->
+
+	        <md-divider ></md-divider>
+	      </md-list>
+	    </md-content>
+
+	    <!-- teste para a validação -->
+
+	    <!-- É valido: {{contatoForm.$valid}}<br>
+	    É inválido: {{contatoForm.$invalid}}<br> -->
+
+	    <!-- formulário para criar um scope no controller -->
+
+	    <form name="contatoForm">
+	    		
+	    	<!-- input nome	 -->
+	    	<md-input-container class="md-block">
+	          <label>Name</label>
+	          <input ng-minlength="10" name="nome" ng-model="contato.nome" ng-required="true" />
+			</md-input-container>   
+			
+			<!-- container de mensagens de erro -->
+			<div ng-messages="contatoForm.nome.$error"  md-colors="{background: 'red'}">
+				
+				<!-- alerta de erro nome -->
+				<div class="md-block" ng-message="required" ng-if="contatoForm.nome.$dirty">
+					Por favor, preencha o campo nome!
+				</div>
+
+				<!-- alerta de erro legth nome -->
+				<div class="md-block" ng-message="minlength" >
+					O campo nome deve ter no mínimo 10 caracteres!
+				</div>	
+
+			</div>
+
+			
+
+			<md-divider ></md-divider>
+
+			<!-- input numero com suas respectivas validações -->
+			<md-input-container class="md-block" flex-gt-sm>
+	          <label>Social Security Number</label>
+	          <input name="telefone" ng-model="contato.telefone" ng-pattern="/^\d{4,5}-\d{4}$/" ng-required="true"/>
+
+	        </md-input-container>
+
+	        <!-- container de mensagem telefone -->
+
+	        <div ng-messages="contatoForm.telefone.$error" md-colors="{background: 'red'}">
+	        		
+	        	<!-- alerta de erro telefone -->
+				<div class="md-block" ng-message="required" ng-if="contatoForm.telefone.$dirty">
+					Por favor, preencha o campo telefone!
+				</div>
+
+				<!-- alerta de erro pattern telefone -->
+				<div  class="md-block" ng-message="pattern">
+					O campo telefone deve ter o formato ####-#### ou #####-####
+				</div>
+
+	        </div>
+
+	        
+
+
+
+	        <!-- select com as operadoras -->
+	        <md-input-container>
+	          <label>Operadoras</label>
+	          <md-select ng-model="contato.operadora">
+	            <md-option><em>None</em></md-option>
+	            <md-option ng-repeat="operadora in operadoras | filter: operadora.categoria | orderBy: 'nome'" ng-value="operadora.codigo">
+	              {{operadora.nome + ' ' + (operadora.preco | currency)}}
+	            </md-option>
+	          </md-select>
+	        </md-input-container>
+
+	    </form>
+
+
+   		
+	    <!-- container para os botões  -->
+        <section layout="row" layout-sm="column" layout-align="center center" layout-wrap>
+
+        <!-- botão para adicionar contato -->
+        <md-button class="md-raised md-primary" md-colors="{background: 'green'}" ng-click="adicionarContato(contato)" ng-disabled="contatoForm.$invalid">Adicionar contato</md-button>
+
+        <!-- botão para apagar contato -->
+        <md-button class="md-raised"  md-colors="{background: 'red'}" ng-click="apagarContatos(contatos)" ng-if="isContatoSelecionado(contatos)">Apagar contatos</md-button>
+
+       </section>
+
+       <!-- exibição do contato -->
+
+  </div>
+  {{contato}}
+  <!-- incluir o rodapé -->
+  <footer style="text-align: center;" ng-include="'view/footer.html'">
+  	
+  </footer>
+
+
+</body>
+</html>

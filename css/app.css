@@ -1,0 +1,45 @@
+
+/*css lista */
+* {
+	box-sizing: border-box;
+
+}
+a {
+	text-decoration: none;
+	color: #FFF;
+	font-size: 30px;
+	color: #FFF;
+}
+a:focus {
+	outline: none;
+
+}
+body{
+	max-width: 100%;
+}
+.menuLista {
+	height: auto;
+}
+.menuListaSub {
+	height: auto;
+}
+.md-block {
+	display: flex;
+	width: auto;
+}
+
+/*ao selecionar contato*/
+.selecionado {
+	background-color: rgb(63, 81, 181);
+}
+
+.ctnFiltros {
+	display: flex;
+	flex-direction: row;
+}
+/*media query filtro*/
+@media all and (max-width: 800px) {
+	.ctnFiltros {
+		flex-direction: column;
+	}
+}
